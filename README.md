@@ -11,5 +11,3 @@ sh -x ./1-CreateMaster.sh
 # On Nodes
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh
-
-# From MAC
