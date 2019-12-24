@@ -43,7 +43,7 @@ sudo systemctl enable docker.service
 # sudo kubeadm join 172.16.94.10:6443 \
 #    --token 9woi9e.gmuuxnbzd8anltdg \
 #    --discovery-token-ca-cert-hash sha256:f9cb1e56fecaf9989b5e882f54bb4a27d56e1e92ef9d56ef19a6634b507d76a9
-ubeadm join 172.31.21.59:6443 --token 77x9am.4pbl1hsqzvjww25b \
+sudo kubeadm join 172.31.21.59:6443 --token 77x9am.4pbl1hsqzvjww25b \
     --discovery-token-ca-cert-hash sha256:b3895374baec8c9041b6e6dddad3505c7c35e14e9e35f0a12747d6043b00cccf
 
 #Back on master, this will say NotReady until the networking pod is created on the new node. Has to schedule the pod, then pull the container.
