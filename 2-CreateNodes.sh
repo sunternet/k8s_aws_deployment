@@ -1,12 +1,5 @@
 #Run on your k8s nodes
 
-#Setup aws cli
-sudo apt-get -y install python-pip
-pip install awscli
-aws configure set aws_access_key_id AKIAY6QLBOSQERQ4PPIJ
-aws configure set aws_secret_access_key dtlfatPpqwMrn6ri/mJPj6HMaQ5kAWg7BuIxvDxf
-aws configure set default.region ap-southeast-1
-
 #Disable swap, swapoff then edit your fstab removing any entry for swap partitions
 #You can recover the space with fdisk. You may want to reboot to ensure your config is ok. 
 swapoff -a
@@ -24,6 +17,13 @@ EOF'
 sudo apt-get update
 apt-cache policy kubelet | head -n 20 
 apt-cache policy docker.io | head -n 20 
+
+#Setup aws cli
+sudo apt-get -y install python-pip
+pip install awscli
+aws configure set aws_access_key_id AKIAY6QLBOSQERQ4PPIJ
+aws configure set aws_secret_access_key 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
+aws configure set default.region ap-southeast-1
 
 #Install the required packages, if needed we can request a specific version
 sudo apt-get install -y docker.io kubelet kubeadm kubectl
