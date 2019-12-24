@@ -1,5 +1,12 @@
 #Run on your k8s nodes
 
+#Setup aws cli
+sudo apt-get -y install python-pip
+pip install awscli
+aws configure set aws_access_key_id AKIAY6QLBOSQERQ4PPIJ
+aws configure set aws_secret_access_key dtlfatPpqwMrn6ri/mJPj6HMaQ5kAWg7BuIxvDxf
+aws configure set default.region ap-southeast-1
+
 #Disable swap, swapoff then edit your fstab removing any entry for swap partitions
 #You can recover the space with fdisk. You may want to reboot to ensure your config is ok. 
 swapoff -a
@@ -16,6 +23,7 @@ EOF'
 #Update the package list 
 sudo apt-get update
 apt-cache policy kubelet | head -n 20 
+apt-cache policy docker.io | head -n 20 
 
 #Install the required packages, if needed we can request a specific version
 sudo apt-get install -y docker.io kubelet kubeadm kubectl
@@ -43,8 +51,13 @@ sudo systemctl enable docker.service
 # sudo kubeadm join 172.16.94.10:6443 \
 #    --token 9woi9e.gmuuxnbzd8anltdg \
 #    --discovery-token-ca-cert-hash sha256:f9cb1e56fecaf9989b5e882f54bb4a27d56e1e92ef9d56ef19a6634b507d76a9
-sudo kubeadm join 172.31.21.59:6443 --token 77x9am.4pbl1hsqzvjww25b \
-    --discovery-token-ca-cert-hash sha256:b3895374baec8c9041b6e6dddad3505c7c35e14e9e35f0a12747d6043b00cccf
+# Get the token and Cert hash from S3
+aws s3 cp s3://toddpublic/k8s/masterip ./masterip
+aws s3 cp s3://toddpublic/k8s/jointoken ./jointoken
+aws s3 cp s3://toddpublic/k8s/certhash ./certhash
+
+sudo kubeadm join `cat ./masterip`:6443 --token `cat ./jointoken` \
+    --discovery-token-ca-cert-hash sha256:`cat ./certhash`
 
 #Back on master, this will say NotReady until the networking pod is created on the new node. Has to schedule the pod, then pull the container.
 # kubectl get nodes 

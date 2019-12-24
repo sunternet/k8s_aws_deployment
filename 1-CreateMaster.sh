@@ -1,3 +1,43 @@
+#Run on Master
+
+#Setup aws cli
+sudo apt-get -y install python-pip
+pip install awscli
+aws configure set aws_access_key_id AKIAY6QLBOSQERQ4PPIJ
+aws configure set aws_secret_access_key dtlfatPpqwMrn6ri/mJPj6HMaQ5kAWg7BuIxvDxf
+aws configure set default.region ap-southeast-1
+
+#Disable swap, swapoff then edit your fstab removing any entry for swap partitions
+#You can recover the space with fdisk. You may want to reboot to ensure your config is ok. 
+swapoff -a
+#vi /etc/fstab
+
+#Add Google's apt repository gpg key
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+
+#Add the Kubernetes apt repository
+sudo bash -c 'cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF'
+
+#Update the package list and use apt-cache to inspect versions available in the repository
+sudo apt-get update
+apt-cache policy kubelet | head -n 20 
+apt-cache policy docker.io | head -n 20 
+
+#Install the required packages, if needed we can request a specific version
+sudo apt-get install -y docker.io kubelet kubeadm kubectl
+sudo apt-mark hold docker.io kubelet kubeadm kubectl
+
+#Check the status of our kubelet and our container runtime, docker.
+#The kubelet will enter a crashloop until it's joined. 
+# sudo systemctl status kubelet.service 
+# sudo systemctl status docker.service 
+
+#Ensure both are set to start when the system starts up.
+sudo systemctl enable kubelet.service
+sudo systemctl enable docker.service
+
 #Only on the master, download the yaml files for the pod network
 wget https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 #The v3.3 calico has error, change to v3.11
@@ -11,7 +51,13 @@ vi calico.yaml
 #--ignore-preflight-errors=NumCPU for AWS Free-Tie VM with only 1 vCPU
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=NumCPU
 
-# Need to store the token and cert-hash to used by nodes later
+# Store the Master IP token and cert-hash to S3 which will be used by nodes later
+ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' > masterip
+kubeadm token list | cut -d " " -f1 | tail -n 1 > jointoken
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //' > certhash
+aws s3 cp jointoken s3://toddpublic/k8s/jointoken
+aws s3 cp certhash s3://toddpublic/k8s/certhash
+aws s3 cp masterip s3://toddpublic/k8s/masterip
 
 #Configure our account on the master to have admin access to the API server from a non-privileged account.
 mkdir -p $HOME/.kube
