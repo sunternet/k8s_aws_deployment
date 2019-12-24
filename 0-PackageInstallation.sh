@@ -30,8 +30,8 @@ sudo apt-mark hold docker.io kubelet kubeadm kubectl
 
 #Check the status of our kubelet and our container runtime, docker.
 #The kubelet will enter a crashloop until it's joined. 
-#sudo systemctl status kubelet.service 
-#sudo systemctl status docker.service 
+# sudo systemctl status kubelet.service 
+# sudo systemctl status docker.service 
 
 #Ensure both are set to start when the system starts up.
 sudo systemctl enable kubelet.service
