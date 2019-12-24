@@ -12,4 +12,8 @@ sh -x ./1-CreateMaster.sh
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh
 
+<<<<<<< HEAD
 # From MAC
+=======
+# On Cloud
+>>>>>>> 24c43735db60654c09aa62be9ba04f964d4dfba7
