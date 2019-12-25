@@ -51,14 +51,6 @@ wget https://docs.projectcalico.org/v3.11/manifests/calico.yaml
 #--ignore-preflight-errors=NumCPU for AWS Free-Tie VM with only 1 vCPU
 sudo kubeadm init --pod-network-cidr=192.168.0.0/16 --ignore-preflight-errors=NumCPU
 
-# Store the Master IP token and cert-hash to S3 which will be used by nodes later
-ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' > masterip
-kubeadm token list | cut -d " " -f1 | tail -n 1 > jointoken
-openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //' > certhash
-aws s3 cp jointoken s3://toddpublic/k8s/jointoken
-aws s3 cp certhash s3://toddpublic/k8s/certhash
-aws s3 cp masterip s3://toddpublic/k8s/masterip
-
 #Configure our account on the master to have admin access to the API server from a non-privileged account.
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -67,6 +59,14 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 #Download yaml files for your pod network
 kubectl apply -f rbac-kdd.yaml
 kubectl apply -f calico.yaml
+
+# Store the Master IP token and cert-hash to S3 which will be used by nodes later
+ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' > masterip
+kubeadm token list | cut -d " " -f1 | tail -n 1 > jointoken
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //' > certhash
+aws s3 cp jointoken s3://toddpublic/k8s/jointoken
+aws s3 cp certhash s3://toddpublic/k8s/certhash
+aws s3 cp masterip s3://toddpublic/k8s/masterip
 
 #Look for the all the system pods and calico pod to change to Running. 
 #The DNS pod won't start until the Pod network is deployed and Running.
