@@ -11,9 +11,9 @@ Cloud Formation:
 # Make sure your VM hostname can be resolved
 
 # On Master
-wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/1-CreateMaster.sh
+wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt18/1-CreateMaster.sh
 sh -x ./1-CreateMaster.sh > ./CreateMaster.log
 
 # On Nodes
-wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
+wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt18/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh > ./CreateNodes.log
