@@ -2,6 +2,7 @@
 Cloud Formation:
     Create a IAM Role with S3 RW for Master
     Create a IAM Role with S3 RO for Nodes
+    Create a SG to open all
     Provisioning 1 Ubuntu 16.04 VM for Master
     Provisioning 1+ Ubuntu 16.04 VM for Nodes
 
@@ -11,8 +12,8 @@ Cloud Formation:
 
 # On Master
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/1-CreateMaster.sh
-sh -x ./1-CreateMaster.sh
+sh -x ./1-CreateMaster.sh > ./CreateMaster.log
 
 # On Nodes
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
-sh -x ./2-CreateNodes.sh
+sh -x ./2-CreateNodes.sh > ./CreateNodes.log

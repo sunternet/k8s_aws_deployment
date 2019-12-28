@@ -34,11 +34,8 @@ Parameters:
 Mappings:
   AWSRegion2AMI:
     ap-southeast-1:
-      HVM64: ami-0ee0b284267ea6cde
-
-
-
-  
+      # HVM64: ami-0ee0b284267ea6cde
+      HVM64: ami-061eb2b23f9f8839c
 
 Resources:
   VPC:
@@ -50,7 +47,7 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: !Ref AWS::StackName
+          Value: !Sub ${AWS::StackName} VPC
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -58,7 +55,7 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: !Ref AWS::StackName
+          Value: !Sub ${AWS::StackName} IGW
 
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -207,17 +204,74 @@ Resources:
             - S3FullInstanceProfile
             - Arn
         InstanceType: t2.micro
-        SecurityGroupIds:
-        - Ref: AllowAllSecurityGroup
+        #SecurityGroupIds:
+        #- Ref: AllowAllSecurityGroup
         KeyName:
           Ref: KeyName
         UserData:
           Fn::Base64:
             Fn::Sub: |
               #!/bin/bash -xe
-              #sudo yum -y update
-              #sudo yum -y install aws-cfn-bootstrap
-              #/opt/aws/bin/cfn-signal -e 0 --region ${AWS::Region} --stack ${AWS::StackName} --resource AutoScalingGroup
+              echo "UserData Start!" > ./CreateMaster.log
+              wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/1-CreateMaster.sh
+              sh -x ./1-CreateMaster.sh >> ./CreateMaster.log
+  
+  K8sNodeLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId:
+          Fn::FindInMap:
+            - AWSRegion2AMI
+            - !Ref AWS::Region
+            - HVM64
+        IamInstanceProfile:
+          Arn:
+            Fn::GetAtt:
+            - S3ReadInstanceProfile
+            - Arn
+        InstanceType: t2.micro
+        #SecurityGroupIds:
+        #- Ref: AllowAllSecurityGroup
+        KeyName:
+          Ref: KeyName
+        UserData:
+          Fn::Base64:
+            Fn::Sub: |
+              #!/bin/bash -xe
+              # wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
+              # sh -x ./2-CreateNodes.sh
+
+  K8sMasterInstance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      LaunchTemplate:
+        LaunchTemplateId: !Ref K8sMasterLaunchTemplate
+        #LaunchTemplateName: String
+        Version: 1
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: 
+            Ref: "PublicSubnet1"
+          GroupSet: 
+            - !Ref AllowAllSecurityGroup
+
+  # K8sNodeInstance: 
+  #   Type: AWS::EC2::Instance
+  #   DependsOn: K8sMasterInstance
+  #   Properties: 
+  #     LaunchTemplate:
+  #       LaunchTemplateId: !Ref K8sNodeLaunchTemplate
+  #       #LaunchTemplateName: String
+  #       Version: 1
+  #     NetworkInterfaces: 
+  #       - AssociatePublicIpAddress: "true"
+  #         DeviceIndex: "0"
+  #         SubnetId: 
+  #           Ref: "PublicSubnet1"
+  #         GroupSet: 
+  #           - !Ref AllowAllSecurityGroup
 
 Outputs:
   VPC:
