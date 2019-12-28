@@ -16,6 +16,30 @@ Parameters:
     Type: String
     Default: 172.16.2.0/24
 
+  KeyName:
+    Description: Name of an existing EC2 key pair
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: Must be the name of an existing EC2 key pair
+
+  MasterGroupSize:
+    Default: '1'
+    Description: The initial nuber of Master instances
+    Type: Number
+
+  NodeGroupSize:
+    Default: '1'
+    Description: The initial nuber of Node instances
+    Type: Number
+
+Mappings:
+  AWSRegion2AMI:
+    ap-southeast-1:
+      HVM64: ami-0ee0b284267ea6cde
+
+
+
+  
+
 Resources:
   VPC:
     Type: AWS::EC2::VPC
@@ -95,7 +119,7 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet2 
 
-  InstanceSecurityGroup:
+  AllowAllSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: "K8s Allow All"
@@ -151,6 +175,49 @@ Resources:
         -
           Key: Name
           Value: !Sub ${AWS::StackName} S3Read
+
+  S3FullInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: S3FullInstanceProfile
+      Path: "/"
+      Roles:
+      - Ref: S3FullRole
+
+  S3ReadInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: S3ReadInstanceProfile
+      Path: "/"
+      Roles:
+      - Ref: S3ReadRole
+
+  K8sMasterLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId:
+          Fn::FindInMap:
+            - AWSRegion2AMI
+            - !Ref AWS::Region
+            - HVM64
+        IamInstanceProfile:
+          Arn:
+            Fn::GetAtt:
+            - S3FullInstanceProfile
+            - Arn
+        InstanceType: t2.micro
+        SecurityGroupIds:
+        - Ref: AllowAllSecurityGroup
+        KeyName:
+          Ref: KeyName
+        UserData:
+          Fn::Base64:
+            Fn::Sub: |
+              #!/bin/bash -xe
+              #sudo yum -y update
+              #sudo yum -y install aws-cfn-bootstrap
+              #/opt/aws/bin/cfn-signal -e 0 --region ${AWS::Region} --stack ${AWS::StackName} --resource AutoScalingGroup
 
 Outputs:
   VPC:
