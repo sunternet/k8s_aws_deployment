@@ -258,9 +258,9 @@ Resources:
           Key: Name
           Value: !Sub ${AWS::StackName} Master
 
-  K8sNodeInstance: 
+  K8sNodeInstance1: 
     Type: AWS::EC2::Instance
-    DependsOn: K8sMasterInstance
+    #DependsOn: K8sMasterInstance
     Properties: 
       LaunchTemplate:
         LaunchTemplateId: !Ref K8sNodeLaunchTemplate
@@ -276,7 +276,27 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: !Sub ${AWS::StackName} Node
+          Value: !Sub ${AWS::StackName} Node1
+
+  K8sNodeInstance2: 
+    Type: AWS::EC2::Instance
+    #DependsOn: K8sMasterInstance
+    Properties: 
+      LaunchTemplate:
+        LaunchTemplateId: !Ref K8sNodeLaunchTemplate
+        #LaunchTemplateName: String
+        Version: 1
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: 
+            Ref: "PublicSubnet1"
+          GroupSet: 
+            - !Ref AllowAllSecurityGroup
+      Tags:
+        -
+          Key: Name
+          Value: !Sub ${AWS::StackName} Node2
 
 Outputs:
   VPC:

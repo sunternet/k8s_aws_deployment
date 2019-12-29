@@ -3,7 +3,7 @@ Load the Cloud Formation Template Provision.yaml in your AWS, it will:
 2. Create a IAM Role with S3 RW for Master
 3. Create a IAM Role with S3 RO for Nodes
 4. Provisioning 1 VM for Master
-5. Provisioning 1 VM for Nodes
+5. Provisioning 2 VM for Nodes
 
 Region: ap-southeast-1
 AMI: Ubuntu 16.04
@@ -19,3 +19,5 @@ sh -x ./2-CreateNodes.sh
 
 # Cannot automate this in UserData since the script need to be run as non-root user "ubuntu"
 # But the UserData can only be run as root
+
+# If you need more Nodes, just "Run More Like This" and run the script on each nodes.
