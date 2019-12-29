@@ -1,5 +1,4 @@
 #Run on Master
-#Ubuntu 18.04 AWS AMI
 
 #Disable swap, swapoff then edit your fstab removing any entry for swap partitions
 #You can recover the space with fdisk. You may want to reboot to ensure your config is ok. 
