@@ -1,4 +1,5 @@
 #Run on your k8s nodes
+#Ubuntu 18.04 AWS AMI
 
 #Disable swap, swapoff then edit your fstab removing any entry for swap partitions
 #You can recover the space with fdisk. You may want to reboot to ensure your config is ok. 
@@ -19,8 +20,7 @@ apt-cache policy kubelet | head -n 20
 apt-cache policy docker.io | head -n 20 
 
 #Setup aws cli
-sudo apt-get -y install python-pip
-pip install awscli
+sudo apt-get -y install awscli
 
 #Install the required packages, if needed we can request a specific version
 sudo apt-get install -y docker.io kubelet kubeadm kubectl

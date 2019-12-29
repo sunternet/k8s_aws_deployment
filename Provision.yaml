@@ -21,15 +21,15 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
     ConstraintDescription: Must be the name of an existing EC2 key pair
 
-  MasterGroupSize:
-    Default: '1'
-    Description: The initial nuber of Master instances
-    Type: Number
+  # MasterGroupSize:
+  #   Default: '1'
+  #   Description: The initial nuber of Master instances
+  #   Type: Number
 
-  NodeGroupSize:
-    Default: '1'
-    Description: The initial nuber of Node instances
-    Type: Number
+  # NodeGroupSize:
+  #   Default: '1'
+  #   Description: The initial nuber of Node instances
+  #   Type: Number
 
 Mappings:
   AWSRegion2AMI:
