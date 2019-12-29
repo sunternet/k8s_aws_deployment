@@ -10,10 +10,10 @@ Cloud Formation:
 # Note, hostname cannot have "_". Must be a DNS-1123 subdomain must consist of lower case alphanumeric characters, '-' or '.', and must start and end with an alphanumeric character (e.g. 'example.com', regex used for validation is '[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*')
 # Make sure your VM hostname can be resolved
 
-# On Master
+# On Master:
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt18/1-CreateMaster.sh
-sh -x ./1-CreateMaster.sh > ./CreateMaster.log
+sh -x 1-CreateMaster.sh
 
-# On Nodes
+# After Master Done, On Nodes:
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt18/2-CreateNodes.sh
-sh -x ./2-CreateNodes.sh > ./CreateNodes.log
+sh -x ./2-CreateNodes.sh

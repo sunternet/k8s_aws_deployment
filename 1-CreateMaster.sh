@@ -57,7 +57,7 @@ kubectl apply -f rbac-kdd.yaml
 kubectl apply -f calico.yaml
 
 # Store the Master IP token and cert-hash to S3 which will be used by nodes later
-ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' > masterip
+ifconfig eth0 | grep 'netmask' | awk '{$1=$1};1' | cut -d ' ' -f 2 > masterip
 kubeadm token list | cut -d " " -f1 | tail -n 1 > jointoken
 openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //' > certhash
 aws s3 cp jointoken s3://toddpublic/k8s/jointoken

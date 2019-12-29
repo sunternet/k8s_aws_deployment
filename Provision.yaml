@@ -212,9 +212,6 @@ Resources:
           Fn::Base64:
             Fn::Sub: |
               #!/bin/bash -xe
-              echo "UserData Start!" > ./CreateMaster.log
-              wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/1-CreateMaster.sh
-              sh -x ./1-CreateMaster.sh >> ./CreateMaster.log
   
   K8sNodeLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
@@ -239,8 +236,6 @@ Resources:
           Fn::Base64:
             Fn::Sub: |
               #!/bin/bash -xe
-              # wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
-              # sh -x ./2-CreateNodes.sh
 
   K8sMasterInstance: 
     Type: AWS::EC2::Instance
@@ -256,22 +251,30 @@ Resources:
             Ref: "PublicSubnet1"
           GroupSet: 
             - !Ref AllowAllSecurityGroup
+      Tags:
+        -
+          Key: Name
+          Value: !Sub ${AWS::StackName} Master
 
-  # K8sNodeInstance: 
-  #   Type: AWS::EC2::Instance
-  #   DependsOn: K8sMasterInstance
-  #   Properties: 
-  #     LaunchTemplate:
-  #       LaunchTemplateId: !Ref K8sNodeLaunchTemplate
-  #       #LaunchTemplateName: String
-  #       Version: 1
-  #     NetworkInterfaces: 
-  #       - AssociatePublicIpAddress: "true"
-  #         DeviceIndex: "0"
-  #         SubnetId: 
-  #           Ref: "PublicSubnet1"
-  #         GroupSet: 
-  #           - !Ref AllowAllSecurityGroup
+  K8sNodeInstance: 
+    Type: AWS::EC2::Instance
+    DependsOn: K8sMasterInstance
+    Properties: 
+      LaunchTemplate:
+        LaunchTemplateId: !Ref K8sNodeLaunchTemplate
+        #LaunchTemplateName: String
+        Version: 1
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: 
+            Ref: "PublicSubnet1"
+          GroupSet: 
+            - !Ref AllowAllSecurityGroup
+      Tags:
+        -
+          Key: Name
+          Value: !Sub ${AWS::StackName} Node
 
 Outputs:
   VPC:
