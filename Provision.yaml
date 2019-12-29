@@ -21,24 +21,23 @@ Parameters:
     Type: AWS::EC2::KeyPair::KeyName
     ConstraintDescription: Must be the name of an existing EC2 key pair
 
-  MasterGroupSize:
-    Default: '1'
-    Description: The initial nuber of Master instances
-    Type: Number
+  # MasterGroupSize:
+  #   Default: '1'
+  #   Description: The initial nuber of Master instances
+  #   Type: Number
 
-  NodeGroupSize:
-    Default: '1'
-    Description: The initial nuber of Node instances
-    Type: Number
+  # NodeGroupSize:
+  #   Default: '1'
+  #   Description: The initial nuber of Node instances
+  #   Type: Number
 
 Mappings:
   AWSRegion2AMI:
     ap-southeast-1:
+      # Ubt 16.04
       HVM64: ami-0ee0b284267ea6cde
-
-
-
-  
+      # Ubt 18.04
+      # HVM64: ami-061eb2b23f9f8839c
 
 Resources:
   VPC:
@@ -50,7 +49,7 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: !Ref AWS::StackName
+          Value: !Sub ${AWS::StackName} VPC
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
@@ -58,7 +57,7 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: !Ref AWS::StackName
+          Value: !Sub ${AWS::StackName} IGW
 
   InternetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -207,17 +206,77 @@ Resources:
             - S3FullInstanceProfile
             - Arn
         InstanceType: t2.micro
-        SecurityGroupIds:
-        - Ref: AllowAllSecurityGroup
+        #SecurityGroupIds:
+        #- Ref: AllowAllSecurityGroup
         KeyName:
           Ref: KeyName
         UserData:
           Fn::Base64:
             Fn::Sub: |
               #!/bin/bash -xe
-              #sudo yum -y update
-              #sudo yum -y install aws-cfn-bootstrap
-              #/opt/aws/bin/cfn-signal -e 0 --region ${AWS::Region} --stack ${AWS::StackName} --resource AutoScalingGroup
+  
+  K8sNodeLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId:
+          Fn::FindInMap:
+            - AWSRegion2AMI
+            - !Ref AWS::Region
+            - HVM64
+        IamInstanceProfile:
+          Arn:
+            Fn::GetAtt:
+            - S3ReadInstanceProfile
+            - Arn
+        InstanceType: t2.micro
+        #SecurityGroupIds:
+        #- Ref: AllowAllSecurityGroup
+        KeyName:
+          Ref: KeyName
+        UserData:
+          Fn::Base64:
+            Fn::Sub: |
+              #!/bin/bash -xe
+
+  K8sMasterInstance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      LaunchTemplate:
+        LaunchTemplateId: !Ref K8sMasterLaunchTemplate
+        #LaunchTemplateName: String
+        Version: 1
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: 
+            Ref: "PublicSubnet1"
+          GroupSet: 
+            - !Ref AllowAllSecurityGroup
+      Tags:
+        -
+          Key: Name
+          Value: !Sub ${AWS::StackName} Master
+
+  K8sNodeInstance: 
+    Type: AWS::EC2::Instance
+    DependsOn: K8sMasterInstance
+    Properties: 
+      LaunchTemplate:
+        LaunchTemplateId: !Ref K8sNodeLaunchTemplate
+        #LaunchTemplateName: String
+        Version: 1
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: 
+            Ref: "PublicSubnet1"
+          GroupSet: 
+            - !Ref AllowAllSecurityGroup
+      Tags:
+        -
+          Key: Name
+          Value: !Sub ${AWS::StackName} Node
 
 Outputs:
   VPC:
