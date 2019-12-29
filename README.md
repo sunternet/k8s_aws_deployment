@@ -5,16 +5,18 @@ Load the Cloud Formation Template Provision.yaml in your AWS, it will:
 4. Provisioning 1 VM for Master
 5. Provisioning 2 VM for Nodes
 
+# The following may change in different branch
 Region: ap-southeast-1
 AMI: Ubuntu 16.04
+wget URL
 
 # After Provisioning is done.
 # On Master:
-wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt18/1-CreateMaster.sh
+wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/1-CreateMaster.sh
 sh -x 1-CreateMaster.sh
 
 # After Master is in Ready Status (kubectl get node), On Nodes:
-wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt18/2-CreateNodes.sh
+wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh
 
 # Cannot automate this in UserData since the script need to be run as non-root user "ubuntu"
