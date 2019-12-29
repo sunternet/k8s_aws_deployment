@@ -34,9 +34,9 @@ Parameters:
 Mappings:
   AWSRegion2AMI:
     ap-southeast-1:
-      # Ubt 16.04
+      # Ubuntu 16.04
       HVM64: ami-0ee0b284267ea6cde
-      # Ubt 18.04
+      # Ubuntu 18.04
       # HVM64: ami-061eb2b23f9f8839c
 
 Resources:
