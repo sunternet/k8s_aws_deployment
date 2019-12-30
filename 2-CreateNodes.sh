@@ -50,7 +50,13 @@ sudo systemctl enable docker.service
 #    --token 9woi9e.gmuuxnbzd8anltdg \
 #    --discovery-token-ca-cert-hash sha256:f9cb1e56fecaf9989b5e882f54bb4a27d56e1e92ef9d56ef19a6634b507d76a9
 # Get the token and Cert hash from SQS
-
+# Get SQS Q URL, --queue-name can be get from script parameter
+aws sqs get-queue-url --queue-name k8s.fifo | grep QueueUrl | cut -d "\"" -f 4 > qurl
+# Read from Q
+aws sqs receive-message --queue-url `cat qurl` | grep Body | grep -v MD5 | cut -d "\"" -f4 > message
+cut -d "|" message -f1 > masterip
+cut -d "|" message -f2 > jointoken
+cut -d "|" message -f3 > certhash
 # aws s3 cp s3://toddpublic/k8s/masterip ./masterip
 # aws s3 cp s3://toddpublic/k8s/jointoken ./jointoken
 # aws s3 cp s3://toddpublic/k8s/certhash ./certhash
