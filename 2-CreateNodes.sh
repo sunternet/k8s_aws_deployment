@@ -21,6 +21,7 @@ apt-cache policy docker.io | head -n 20
 #Setup aws cli
 sudo apt-get -y install python-pip
 pip install awscli
+aws configure set region ap-southeast-1
 
 #Install the required packages, if needed we can request a specific version
 sudo apt-get install -y docker.io kubelet kubeadm kubectl
@@ -48,10 +49,12 @@ sudo systemctl enable docker.service
 # sudo kubeadm join 172.16.94.10:6443 \
 #    --token 9woi9e.gmuuxnbzd8anltdg \
 #    --discovery-token-ca-cert-hash sha256:f9cb1e56fecaf9989b5e882f54bb4a27d56e1e92ef9d56ef19a6634b507d76a9
-# Get the token and Cert hash from S3
-aws s3 cp s3://toddpublic/k8s/masterip ./masterip
-aws s3 cp s3://toddpublic/k8s/jointoken ./jointoken
-aws s3 cp s3://toddpublic/k8s/certhash ./certhash
+# Get the token and Cert hash from SQS
+
+# aws s3 cp s3://toddpublic/k8s/masterip ./masterip
+# aws s3 cp s3://toddpublic/k8s/jointoken ./jointoken
+# aws s3 cp s3://toddpublic/k8s/certhash ./certhash
+
 
 sudo kubeadm join `cat ./masterip`:6443 --token `cat ./jointoken` \
     --discovery-token-ca-cert-hash sha256:`cat ./certhash`

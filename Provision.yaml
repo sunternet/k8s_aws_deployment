@@ -134,8 +134,19 @@ Resources:
         -
           Key: Name
           Value: !Ref AWS::StackName
-          
-  S3FullRole:
+  
+  SQS:  
+    Type: AWS::SQS::Queue
+    Properties: 
+      FifoQueue: TRUE
+      QueueName: k8s.fifo
+      Tags: 
+        -
+          Key: Name
+          Value: !Sub ${AWS::StackName} FIFO Q
+      VisibilityTimeout: 0
+
+  SQSFullRole:
     Type: 'AWS::IAM::Role'
     Properties:
       AssumeRolePolicyDocument:
@@ -148,48 +159,48 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       ManagedPolicyArns: 
-        - arn:aws:iam::aws:policy/AmazonS3FullAccess
-      RoleName: S3Full
+        - arn:aws:iam::aws:policy/AmazonSQSFullAccess
+      RoleName: !Sub ${AWS::StackName}_SQSFull
       Tags:
         -
           Key: Name
-          Value: !Sub ${AWS::StackName} S3Full
+          Value: !Sub ${AWS::StackName} SQSFull
 
-  S3ReadRole:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - ec2.amazonaws.com
-            Action:
-              - 'sts:AssumeRole'
-      ManagedPolicyArns: 
-        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
-      RoleName: S3Read
-      Tags:
-        -
-          Key: Name
-          Value: !Sub ${AWS::StackName} S3Read
+  # SQSReadRole:
+  #   Type: 'AWS::IAM::Role'
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service:
+  #               - ec2.amazonaws.com
+  #           Action:
+  #             - 'sts:AssumeRole'
+  #     ManagedPolicyArns: 
+  #       - arn:aws:iam::aws:policy/AmazonSQSReadOnlyAccess
+  #     RoleName: !Sub ${AWS::StackName}_SQSRead
+  #     Tags:
+  #       -
+  #         Key: Name
+  #         Value: !Sub ${AWS::StackName} SQSRead
 
-  S3FullInstanceProfile:
+  SQSFullInstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      InstanceProfileName: S3FullInstanceProfile
+      InstanceProfileName: !Sub ${AWS::StackName}_SQSFullInstanceProfile
       Path: "/"
       Roles:
-      - Ref: S3FullRole
+      - Ref: SQSFullRole
 
-  S3ReadInstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      InstanceProfileName: S3ReadInstanceProfile
-      Path: "/"
-      Roles:
-      - Ref: S3ReadRole
+  # SQSReadInstanceProfile:
+  #   Type: AWS::IAM::InstanceProfile
+  #   Properties:
+  #     InstanceProfileName: !Sub ${AWS::StackName}_SQSReadInstanceProfile
+  #     Path: "/"
+  #     Roles:
+  #     - Ref: SQSReadRole
 
   K8sMasterLaunchTemplate:
     Type: AWS::EC2::LaunchTemplate
@@ -203,7 +214,7 @@ Resources:
         IamInstanceProfile:
           Arn:
             Fn::GetAtt:
-            - S3FullInstanceProfile
+            - SQSFullInstanceProfile
             - Arn
         InstanceType: t2.micro
         #SecurityGroupIds:
@@ -227,7 +238,7 @@ Resources:
         IamInstanceProfile:
           Arn:
             Fn::GetAtt:
-            - S3ReadInstanceProfile
+            - SQSFullInstanceProfile
             - Arn
         InstanceType: t2.micro
         #SecurityGroupIds:
