@@ -37,10 +37,11 @@ sudo systemctl enable kubelet.service
 sudo systemctl enable docker.service
 
 #Only on the master, download the yaml files for the pod network
-wget https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
-#The v3.3 calico has error, change to v3.11
 # wget https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 wget https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+
+#The following is still needed?
+# wget https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/rbac-kdd.yaml
 
 #Look inside calico.yaml and find the network range, adjust if needed.
 #vi calico.yaml

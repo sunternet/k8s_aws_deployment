@@ -11,10 +11,10 @@ Parameters:
     Type: String
     Default: 172.16.1.0/24
 
-  PublicSubnet2CIDR:
-    Description: Please enter the CIDR for the public subnet in the second Availability Zone
-    Type: String
-    Default: 172.16.2.0/24
+  # PublicSubnet2CIDR:
+  #   Description: Please enter the CIDR for the public subnet in the second Availability Zone
+  #   Type: String
+  #   Default: 172.16.2.0/24
 
   KeyName:
     Description: Name of an existing EC2 key pair
@@ -77,17 +77,17 @@ Resources:
           Key: Name
           Value: !Sub ${AWS::StackName} Public Subnet (AZ1)
 
-  PublicSubnet2:
-    Type: AWS::EC2::Subnet
-    Properties:
-      VpcId: !Ref VPC
-      AvailabilityZone: !Select [1, !GetAZs ""]
-      CidrBlock: !Ref PublicSubnet2CIDR
-      MapPublicIpOnLaunch: true
-      Tags:
-        -
-          Key: Name
-          Value: !Sub ${AWS::StackName} Public Subnet (AZ2)
+  # PublicSubnet2:
+  #   Type: AWS::EC2::Subnet
+  #   Properties:
+  #     VpcId: !Ref VPC
+  #     AvailabilityZone: !Select [1, !GetAZs ""]
+  #     CidrBlock: !Ref PublicSubnet2CIDR
+  #     MapPublicIpOnLaunch: true
+  #     Tags:
+  #       -
+  #         Key: Name
+  #         Value: !Sub ${AWS::StackName} Public Subnet (AZ2)
 
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
@@ -112,11 +112,11 @@ Resources:
       RouteTableId: !Ref PublicRouteTable
       SubnetId: !Ref PublicSubnet1
 
-  PublicSubnet2RouteTableAssociation:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      RouteTableId: !Ref PublicRouteTable
-      SubnetId: !Ref PublicSubnet2 
+  # PublicSubnet2RouteTableAssociation:
+  #   Type: AWS::EC2::SubnetRouteTableAssociation
+  #   Properties:
+  #     RouteTableId: !Ref PublicRouteTable
+  #     SubnetId: !Ref PublicSubnet2 
 
   AllowAllSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -319,7 +319,8 @@ Outputs:
 
   PublicSubnets:
     Description: A list of the public subnets
-    Value: !Join [",", [!Ref PublicSubnet1, !Ref PublicSubnet2]]
+    # Value: !Join [",", [!Ref PublicSubnet1, !Ref PublicSubnet2]]
+    Value: !Ref PublicSubnet1
 
   PublicSubnet1:
     Description: Public subnet 1 ID
@@ -328,9 +329,9 @@ Outputs:
       Name:
         !Sub "${AWS::StackName}-PublicSubnet1"
 
-  PublicSubnet2:
-    Description: Public subnet 2 ID
-    Value: !Ref PublicSubnet2
-    Export:
-      Name:
-        !Sub "${AWS::StackName}-PublicSubnet2"
+  # PublicSubnet2:
+  #   Description: Public subnet 2 ID
+  #   Value: !Ref PublicSubnet2
+  #   Export:
+  #     Name:
+  #       !Sub "${AWS::StackName}-PublicSubnet2"

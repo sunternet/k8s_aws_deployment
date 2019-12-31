@@ -9,7 +9,7 @@ Load the Cloud Formation Template Provision.yaml in your AWS, it will:
 # The following may change in different branch
 Region: ap-southeast-1
 AMI: Ubuntu 16.04
-wget URL
+GitHub Repo URL: https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs
 
 # After Provisioning is done.
 # On Master:
