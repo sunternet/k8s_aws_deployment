@@ -36,7 +36,7 @@ sudo apt-mark hold docker.io kubelet kubeadm kubectl
 sudo systemctl enable kubelet.service
 sudo systemctl enable docker.service
 
-#Only on the master, download the yaml files for the pod network
+#Download the yaml files for the pod network
 # wget https://docs.projectcalico.org/v3.3/getting-started/kubernetes/installation/hosted/kubernetes-datastore/calico-networking/1.7/calico.yaml
 wget https://docs.projectcalico.org/v3.11/manifests/calico.yaml
 
@@ -55,8 +55,8 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-#Download yaml files for your pod network
-kubectl apply -f rbac-kdd.yaml
+#Apply yaml files for your pod network
+#kubectl apply -f rbac-kdd.yaml
 kubectl apply -f calico.yaml
 
 # Store the Master IP token and cert-hash to SQS which will be used by nodes later
