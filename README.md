@@ -1,5 +1,5 @@
 # Switch to your AWS ap-southeast-1 (Singapore) region.
-# Load the Cloud Formation Template Provision.yaml, it will:
+# Load the Cloud Formation Template "0-Provision.yaml", it will:
     1. Create a VPC to host the environment
     2. Create a IAM Role with SQS RW for Master
     3. Create a IAM Role with SQS RO for Nodes
@@ -16,7 +16,7 @@ sh -x 1-CreateMaster.sh
 kubectl get node
 kubectl get pods --all-namespaces
 
-# After Master is in Ready Status, On Nodes:
+# On Nodes:
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh
 
@@ -24,11 +24,25 @@ sh -x ./2-CreateNodes.sh
 kubectl get node
 
 # If you need more Nodes, just "Run More Like This" in AWS EC2 and run the script on each nodes.
+# You Are Done!
 
-# (Optional) Follow the link below to deploy a test app that can be accessed externally AWS
-https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/
+# Below are Optional steps to run a Hello App in your k8s to test it's functionality
+# Deploy the App
+kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/3-DeployHelloApp.yml
+# Run a Service for the Deployment
+kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/4-ServiceHelloApp.yml
 
-# ....
+# Confirm the Service is running
+kubectl get all
+
+# Use curl to your service Cluster-IP to check the Application
+curl http://<Cluster-IP>
+
+# Delete the test App
+kubectl delete deployment hello-world
+kubectl delete service hello-world
+
+# ...................................................
 # The following may change in different branch
 #   Region: ap-southeast-1
 #   AMI: Ubuntu 16.04
