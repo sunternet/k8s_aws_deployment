@@ -16,11 +16,15 @@ GitHub Repo URL: https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/1-CreateMaster.sh
 sh -x 1-CreateMaster.sh
 
-# After Master is in Ready Status (kubectl get node), On Nodes:
+# Verify Master is in Ready Status:
+kubectl get node
+kubectl get pods --all-namespaces
+
+# After Master is in Ready Status, On Nodes:
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh
 
-# Cannot automate this in UserData since the script need to be run as non-root user "ubuntu"
-# But the UserData can only be run as root
+# Back to Master, wait several minutes and verify Nodes are in Ready Status:
+kubectl get node
 
-# If you need more Nodes, just "Run More Like This" and run the script on each nodes.
+# If you need more Nodes, just "Run More Like This" in AWS EC2 and run the script on each nodes.
