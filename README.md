@@ -1,11 +1,10 @@
 # Infrastructure Provisioning
 Make sure switching to your AWS ap-southeast-1 (Singapore) region. Load the Cloud Formation Template "0-Provision.yaml", it will:
 1. Create a VPC to host the environment
-2. Create a IAM Role with SQS RW for Master
-3. Create a IAM Role with SQS RO for Nodes
-4. Provisioning 1 VM for Master
-5. Provisioning 2 VM for Nodes
-6. Create a SQS Q called "k8s.fifo" for transferring masterIP, jointoken, certhash from Master to Nodes
+2. Create a IAM Role with SQS(Simple Queue Service) RW for Master and Nodes
+3. Provisioning 1 VM for Master
+4. Provisioning 2 VM for Nodes
+5. Create a SQS Queue called "k8s.fifo" for transferring masterIP, jointoken, certhash from Master to Nodes
 
 # Install Master
 After Provisioning is done.
