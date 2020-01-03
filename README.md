@@ -1,16 +1,15 @@
 # Infrastructure Provisioning
-Switch to your AWS ap-southeast-1 (Singapore) region.
-
-Load the Cloud Formation Template "0-Provision.yaml", it will:
-    1. Create a VPC to host the environment
-    2. Create a IAM Role with SQS RW for Master
-    3. Create a IAM Role with SQS RO for Nodes
-    4. Provisioning 1 VM for Master
-    5. Provisioning 2 VM for Nodes
-    6. Create a SQS Q called "k8s.fifo" for transferring masterIP, jointoken, certhash from Master to Nodes
+Switch to your AWS ap-southeast-1 (Singapore) region. Load the Cloud Formation Template "0-Provision.yaml", it will:
+1. Create a VPC to host the environment
+2. Create a IAM Role with SQS RW for Master
+3. Create a IAM Role with SQS RO for Nodes
+4. Provisioning 1 VM for Master
+5. Provisioning 2 VM for Nodes
+6. Create a SQS Q called "k8s.fifo" for transferring masterIP, jointoken, certhash from Master to Nodes
 
 # Install Master
 After Provisioning is done.
+
 On Master:
 ```
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/1-CreateMaster.sh
@@ -38,7 +37,8 @@ If you need more Nodes, just "Run More Like This" in AWS EC2 and run the script 
 # You Are Done!
 
 # Deploy Test App (Optional)
-Below are Optional steps to run a Hello App in your k8s to test it's functionality
+Below are Optional steps to run a Hello App in your k8s to test it's functionality.
+
 Deploy the App
 ```
 kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/3-DeployHelloApp.yml
@@ -62,6 +62,6 @@ kubectl delete service hello-world
 ```
 # My Note
  The following may change in different branch
-   Region: ap-southeast-1
-   AMI: Ubuntu 16.04
-   GitHub Repo URL: https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs
+ - Region: ap-southeast-1
+ -  AMI: Ubuntu 16.04
+ -  GitHub Repo URL: https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs
