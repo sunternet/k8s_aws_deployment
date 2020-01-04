@@ -14,6 +14,7 @@ After Provisioning is done.
 On Master:
 ```
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/1-CreateMaster.sh
+wget [./1-CreateMaster.sh]
 sh -x 1-CreateMaster.sh
 ```
 Verify Master is in Ready Status:
