@@ -1,7 +1,7 @@
 # Infrastructure Provisioning
 Make sure switching to your AWS ap-southeast-1 (Singapore) region. 
 
-Follow the [CloudFormation Steps] (https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/CloudFormation_Steps.jpg) to load the Cloud Formation Template "0-Provision.yaml", it will:
+Follow the [CloudFormation Steps](./CloudFormation_Steps.jpg) to load the Cloud Formation Template "0-Provision.yaml", it will:
 1. Create a VPC to host the environment
 2. Create a IAM Role with SQS(Simple Queue Service) RW for Master and Nodes
 3. Provisioning 1 VM for Master
@@ -33,7 +33,7 @@ kubectl get node
 ```
 
 # Install More Nodes
-If you need more Nodes, just "Run More Like This" in AWS EC2 and run the script on each nodes.
+If you need more Nodes, just "Run More Like This" in AWS EC2 and run the [Install Nodes](#install-nodes) script on each nodes.
 
 # You Are Done!
 
