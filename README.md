@@ -13,8 +13,7 @@ After Provisioning is done.
 
 On Master:
 ```
-wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/1-CreateMaster.sh
-wget [./1-CreateMaster.sh]
+wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/1-CreateMaster.sh
 sh -x 1-CreateMaster.sh
 ```
 Verify Master is in Ready Status:
@@ -25,7 +24,7 @@ kubectl get pods --all-namespaces
 # Install Nodes
 On Nodes:
 ```
-wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/2-CreateNodes.sh
+wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh
 ```
 Back to Master, wait several minutes and verify Nodes are in Ready Status:
@@ -43,11 +42,11 @@ Below are Optional steps to run a Hello App in your k8s to test it's functionali
 
 Deploy the App
 ```
-kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/3-DeployHelloApp.yml
+kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/3-DeployHelloApp.yml
 ```
 Run a Service for the Deployment
 ```
-kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs/4-ServiceHelloApp.yml
+kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/4-ServiceHelloApp.yml
 ```
 Confirm the Service is running
 ```
@@ -66,4 +65,4 @@ kubectl delete service hello-world
  The following may change in different branch
  - Region: ap-southeast-1
  -  AMI: Ubuntu 16.04
- -  GitHub Repo URL: https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_sqs
+ -  GitHub Repo URL: https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master
