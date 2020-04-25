@@ -52,9 +52,9 @@ Confirm the Service is running
 ```
 kubectl get all
 ```
-Use curl to your service Cluster-IP to check the Application
+Use curl to your NodeIP:30000 to check the Application
 ```
-curl http://<Cluster-IP>
+curl http://<NodeIP:30000>
 ```
 Delete the test App
 ```
