@@ -11,9 +11,10 @@ spec:
   - port: 80
     protocol: TCP
     targetPort: 8080
+    nodePort: 30000
   selector:
     run: hello-world
   sessionAffinity: None
-  type: ClusterIP
+  type: NodePort
 status:
   loadBalancer: {}
