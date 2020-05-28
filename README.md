@@ -9,6 +9,7 @@ Follow the [CloudFormation Steps](./CloudFormation_Steps.jpg) to load the Cloud 
 5. Create a SQS Queue called "k8s.fifo" for transferring masterIP, jointoken, certhash from Master to Nodes
 
 # Install Master
+This will install a Master Node with Calico Network Plugin.
 After Provisioning is done.
 
 On Master:
