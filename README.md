@@ -10,6 +10,7 @@ Follow the [CloudFormation Steps](./CloudFormation_Steps.jpg) to load the Cloud 
 
 # Install Master
 This will install a Master Node with Calico Network Plugin.
+
 After Provisioning is done.
 
 On Master:
