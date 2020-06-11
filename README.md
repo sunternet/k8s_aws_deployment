@@ -18,6 +18,8 @@ On Master:
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/1-CreateMaster.sh
 sh -x 1-CreateMaster.sh
 ```
+Copy the last "sudo kubeadm join" command.
+
 Verify Master is in Ready Status:
 ```
 kubectl get node
@@ -28,7 +30,10 @@ On Nodes:
 ```
 wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh
+sudo kubeadm join ...
 ```
+The "kubeadm join" is copied from master.
+
 Back to Master, wait several minutes and verify Nodes are in Ready Status:
 ```
 kubectl get node
