@@ -135,36 +135,36 @@ Resources:
           Key: Name
           Value: !Ref AWS::StackName
   
-  SQS:  
-    Type: AWS::SQS::Queue
-    Properties: 
-      FifoQueue: TRUE
-      QueueName: k8s.fifo
-      Tags: 
-        -
-          Key: Name
-          Value: !Sub ${AWS::StackName} FIFO Q
-      VisibilityTimeout: 0
+  # SQS:  
+  #   Type: AWS::SQS::Queue
+  #   Properties: 
+  #     FifoQueue: TRUE
+  #     QueueName: k8s.fifo
+  #     Tags: 
+  #       -
+  #         Key: Name
+  #         Value: !Sub ${AWS::StackName} FIFO Q
+  #     VisibilityTimeout: 0
 
-  SQSFullRole:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - ec2.amazonaws.com
-            Action:
-              - 'sts:AssumeRole'
-      ManagedPolicyArns: 
-        - arn:aws:iam::aws:policy/AmazonSQSFullAccess
-      RoleName: !Sub ${AWS::StackName}_SQSFull
-      Tags:
-        -
-          Key: Name
-          Value: !Sub ${AWS::StackName} SQSFull
+  # SQSFullRole:
+  #   Type: 'AWS::IAM::Role'
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service:
+  #               - ec2.amazonaws.com
+  #           Action:
+  #             - 'sts:AssumeRole'
+  #     ManagedPolicyArns: 
+  #       - arn:aws:iam::aws:policy/AmazonSQSFullAccess
+  #     RoleName: !Sub ${AWS::StackName}_SQSFull
+  #     Tags:
+  #       -
+  #         Key: Name
+  #         Value: !Sub ${AWS::StackName} SQSFull
 
   # SQSReadRole:
   #   Type: 'AWS::IAM::Role'
@@ -186,13 +186,13 @@ Resources:
   #         Key: Name
   #         Value: !Sub ${AWS::StackName} SQSRead
 
-  SQSFullInstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      InstanceProfileName: !Sub ${AWS::StackName}_SQSFullInstanceProfile
-      Path: "/"
-      Roles:
-      - Ref: SQSFullRole
+  # SQSFullInstanceProfile:
+  #   Type: AWS::IAM::InstanceProfile
+  #   Properties:
+  #     InstanceProfileName: !Sub ${AWS::StackName}_SQSFullInstanceProfile
+  #     Path: "/"
+  #     Roles:
+  #     - Ref: SQSFullRole
 
   # SQSReadInstanceProfile:
   #   Type: AWS::IAM::InstanceProfile
@@ -211,11 +211,11 @@ Resources:
             - AWSRegion2AMI
             - !Ref AWS::Region
             - HVM64
-        IamInstanceProfile:
-          Arn:
-            Fn::GetAtt:
-            - SQSFullInstanceProfile
-            - Arn
+        # IamInstanceProfile:
+        #   Arn:
+        #     Fn::GetAtt:
+        #     - SQSFullInstanceProfile
+        #     - Arn
         InstanceType: t2.micro
         #SecurityGroupIds:
         #- Ref: AllowAllSecurityGroup
@@ -235,11 +235,11 @@ Resources:
             - AWSRegion2AMI
             - !Ref AWS::Region
             - HVM64
-        IamInstanceProfile:
-          Arn:
-            Fn::GetAtt:
-            - SQSFullInstanceProfile
-            - Arn
+        # IamInstanceProfile:
+        #   Arn:
+        #     Fn::GetAtt:
+        #     - SQSFullInstanceProfile
+        #     - Arn
         InstanceType: t2.micro
         #SecurityGroupIds:
         #- Ref: AllowAllSecurityGroup
