@@ -65,9 +65,10 @@ ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' > masterip
 kubeadm token list | cut -d " " -f1 | tail -n 1 > jointoken
 openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //' > certhash
 # Get SQS Q URL, --queue-name can be get from script parameter
-aws sqs get-queue-url --queue-name k8s.fifo | grep QueueUrl | cut -d "\"" -f 4 > qurl
+# aws sqs get-queue-url --queue-name k8s.fifo | grep QueueUrl | cut -d "\"" -f 4 > qurl
 # Send to Q
-aws sqs send-message --queue-url `cat qurl` --message-body "`awk '{printf "%s",$0;printf "|"}' masterip jointoken certhash`" --message-deduplication-id "12345" --message-group-id "12345"
+# aws sqs send-message --queue-url `cat qurl` --message-body "`awk '{printf "%s",$0;printf "|"}' masterip jointoken certhash`" --message-deduplication-id "12345" --message-group-id "12345"
+echo "run sudo kubeadm join $masterip:6443 --token $jointoken --discovery-token-ca-cert-hash sha256:$certhash on Nodes to join the cluster"
 
 #Look for the all the system pods and calico pod to change to Running. 
 #The DNS pod won't start until the Pod network is deployed and Running.
