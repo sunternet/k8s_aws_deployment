@@ -5,7 +5,7 @@ Follow the [CloudFormation Steps](./CloudFormation_Steps.jpg) to load the Cloud 
 1. Create a VPC to host the environment
 2. Create a IAM Role with SQS(Simple Queue Service) RW for Master and Nodes
 3. Provisioning 1 VM for Master
-4. Provisioning 2 VM for Nodes
+4. Provisioning 3 VM for Nodes
 5. Create a SQS Queue called "k8s.fifo" for transferring masterIP, jointoken, certhash from Master to Nodes
 
 # Install Master
