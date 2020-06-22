@@ -61,9 +61,9 @@ kubectl apply -f calico.yaml
 
 # Store the Master IP token and cert-hash to SQS which will be used by nodes later
 # In FIFO order: masterip jointoken certhash
-ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}' > masterip
-kubeadm token list | cut -d " " -f1 | tail -n 1 > jointoken
-openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //' > certhash
+masterip=`ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}'`
+jointoken=`kubeadm token list | cut -d " " -f1 | tail -n 1`
+certhash=`openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'`
 # Get SQS Q URL, --queue-name can be get from script parameter
 # aws sqs get-queue-url --queue-name k8s.fifo | grep QueueUrl | cut -d "\"" -f 4 > qurl
 # Send to Q
