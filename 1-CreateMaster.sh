@@ -19,9 +19,9 @@ apt-cache policy kubelet | head -n 20
 apt-cache policy docker.io | head -n 20 
 
 #Setup aws cli
-sudo apt-get -y install python-pip
-pip install awscli
-aws configure set region ap-southeast-1
+# sudo apt-get -y install python-pip
+# pip install awscli
+# aws configure set region ap-southeast-1
 
 #Install the required packages, if needed we can request a specific version
 sudo apt-get install -y docker.io kubelet kubeadm kubectl
