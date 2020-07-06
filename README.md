@@ -13,7 +13,7 @@ After Provisioning is done.
 
 On Master:
 ```
-wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/1-CreateMaster.sh
+wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_manual/1-CreateMaster.sh
 sh -x 1-CreateMaster.sh
 ```
 Copy the last "sudo kubeadm join" command.
@@ -26,7 +26,7 @@ kubectl get pods --all-namespaces
 # Install Nodes
 On Nodes:
 ```
-wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/2-CreateNodes.sh
+wget https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_manual/2-CreateNodes.sh
 sh -x ./2-CreateNodes.sh
 sudo kubeadm join ...
 ```
@@ -47,11 +47,11 @@ Below are Optional steps to run a Hello App in your k8s to test it's functionali
 
 Deploy the App
 ```
-kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/3-DeployHelloApp.yml
+kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_manual/3-DeployHelloApp.yml
 ```
 Run a Service for the Deployment
 ```
-kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/master/4-ServiceHelloApp.yml
+kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_manual/4-ServiceHelloApp.yml
 ```
 Confirm the Service is running
 ```
