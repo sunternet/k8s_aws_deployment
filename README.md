@@ -3,10 +3,8 @@ Make sure switching to your AWS ap-southeast-1 (Singapore) region.
 
 Follow the [CloudFormation Steps](./CloudFormation_Steps.jpg) to load the Cloud Formation Template "0-Provision.yaml", it will:
 1. Create a VPC to host the environment
-2. Create a IAM Role with SQS(Simple Queue Service) RW for Master and Nodes
-3. Provisioning 1 VM for Master
-4. Provisioning 3 VM for Nodes
-5. Create a SQS Queue called "k8s.fifo" for transferring masterIP, jointoken, certhash from Master to Nodes
+2. Provisioning 1 VM for Master
+3. Provisioning 3 VM for Nodes
 
 # Install Master
 This will install a Master Node with Calico Network Plugin.
