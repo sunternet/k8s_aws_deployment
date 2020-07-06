@@ -47,19 +47,19 @@ Below are Optional steps to run a Hello App in your k8s to test it's functionali
 
 Deploy the App
 ```
-kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_manual/3-DeployHelloApp.yml
+kubectl create deployment hello-world --image=gcr.io/google-samples/hello-app:1.0
 ```
 Run a Service for the Deployment
 ```
-kubectl apply -f https://raw.githubusercontent.com/sunternet/k8s_aws_deployment/ubt16_manual/4-ServiceHelloApp.yml
+kubectl expose deployment hello-world --port=80 --target-port=8080 --type ClusterIP
 ```
 Confirm the Service is running
 ```
 kubectl get all
 ```
-Use curl to your NodeIP:30000 to check the Application
+Use curl to your Service ClusterIP to check the Application
 ```
-curl http://<NodeIP:30000>
+curl http://<Service ClusterIP>
 ```
 Delete the test App
 ```
