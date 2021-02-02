@@ -38,6 +38,9 @@ Mappings:
       HVM64: ami-0ee0b284267ea6cde
       # Ubuntu 18.04
       # HVM64: ami-061eb2b23f9f8839c
+    ap-east-1:
+      HMV64: ami-028a5cff2f5a0f6c3
+
 
 Resources:
   VPC:
@@ -216,7 +219,7 @@ Resources:
         #     Fn::GetAtt:
         #     - SQSFullInstanceProfile
         #     - Arn
-        InstanceType: t2.micro
+        InstanceType: t2.medium
         #SecurityGroupIds:
         #- Ref: AllowAllSecurityGroup
         KeyName:
